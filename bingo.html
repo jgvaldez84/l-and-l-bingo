@@ -1,0 +1,122 @@
+<html>
+	<head>
+		<title>Daily Scrum Bingo</title>
+		<link rel="stylesheet" href="/styles/bingoStyles.css" />
+	</head>
+	<body>
+		<div id="bingo-card-container"></div>
+		<div class="bingo-row">
+			<h1>Leather and Lace</h1>
+			<div class="bingo-square">B</div>
+			<div class="bingo-square">I</div>
+			<div class="bingo-square">N</div>
+			<div class="bingo-square">G</div>
+			<div class="bingo-square">O</div>
+</div>
+			<table id="cards"></table>
+			<script>
+				var size = 5;
+				var texts = [
+					'Nick Swardson',
+					'Old Gays',
+					'Witcher X 2',
+					'Zoomies',
+					'Rev MLK',
+					'Janet',
+					'Atwood Lesbians',
+					'Jake',
+					'Hands Dancer',
+					'White Glasses',
+					'Jakes Harem',
+					'Chris Ex',
+					'Fitness Goth',
+					'Guy on Leash',
+					'Guy in gym shorts',
+					'Mohawk/suit Guy',
+					'Strap Gays',
+					'Rainbow Brite',
+					'Stinky Tail Guy',
+					'Furries',
+					'Bill Maher Jr.',
+					'Fire Breather',
+					'Vic',
+					'Topless Woman',
+					'Bad GoGo Dancer',
+					'Stinky Underarm Smell',
+				];
+
+				var cards = (function createCards() {
+					var cards = [];
+					var table = document.getElementById('cards');
+					for (var y = 0; y < size; y++) {
+						var tr = document.createElement('tr');
+						var rowCards = [];
+						cards.push(rowCards);
+						table.appendChild(tr);
+						for (var x = 0; x < size; x++) {
+							var td = document.createElement('td');
+							td.classList.add('card');
+							td.onclick = select(x, y);
+							tr.appendChild(td);
+							rowCards.push({ element: td });
+						}
+					}
+					return cards;
+				})();
+
+				function select(x, y) {
+					return function () {
+						var card = cards[y][x];
+						if (!card.selected) {
+							card.element.classList.add('selected');
+							card.selected = true;
+							checkOver();
+						}
+					};
+				}
+
+				function lineSelected(x, y, dx, dy) {
+					var r = true;
+					while (r && x >= 0 && x < size && y >= 0 && y < size) {
+						r = r && cards[y][x].selected;
+						(x += dx), (y += dy);
+					}
+					return r;
+				}
+
+				function checkOver() {
+					var hasLine =
+						lineSelected(0, 0, 1, 1) || lineSelected(size - 1, 0, -1, 1);
+					for (i = 0; i < size; i++) {
+						hasLine =
+							hasLine || lineSelected(i, 0, 0, 1) || lineSelected(0, i, 1, 0);
+					}
+					if (hasLine) {
+						setTimeout(function () {
+							alert('You found the most weirdos!');
+							init();
+						}, 100);
+					}
+				}
+
+				function init() {
+					var a = Array.from(texts);
+					a.sort((a, b) => 0.5 - Math.random());
+					for (var i = 0; i < a.length; i++) {
+						var x = i % size,
+							y = Math.floor(i / size);
+						var card = cards[y][x];
+						card.element.innerText = a[i];
+						card.element.classList.remove('selected');
+						card.selected = false;
+					}
+				}
+
+				init();
+			</script>
+		</div>
+	</body>
+</html>
+
+<!-- <div id="bingo-card-container">
+			<div class="bingo-card"> -->
